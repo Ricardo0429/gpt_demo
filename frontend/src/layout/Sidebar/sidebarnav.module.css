@@ -1,0 +1,52 @@
+.sidenav {
+  position: relative;
+  width: 320px;
+  z-index: 9999;
+  transition: width 0.3s ease-in-out;
+  background-color: #fa437f;
+  /* background-color: rgb(10, 25, 41); */
+  padding-top: 12px;
+}
+.sidenavClosed {
+  composes: sidenav;
+  transition: width 0.3s ease-in-out;
+  width: 70px;
+}
+
+.sideitem {
+  display: flex;
+  align-items: center;
+  padding: 20px 20px;
+  cursor: pointer;
+  color: #fff;
+  text-decoration: none;
+  overflow: hidden;
+  font-size: 2rem;
+  font-weight: 700;
+}
+
+.linkText {
+  padding-left: 16px;
+}
+
+.sideitem:hover {
+  background-color: #244f7d1c;
+}
+
+.menuBtn {
+  position: absolute;
+  right: -30px;
+  bottom: 30%;
+  color: white;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 20px;
+  height: 60px;
+  width: 60px;
+  background-color: rgb(28, 25, 25);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

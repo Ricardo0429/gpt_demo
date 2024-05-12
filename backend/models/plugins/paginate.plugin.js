@@ -12,11 +12,11 @@ const paginate = (schema) => {
   /**
    * Query for documents with pagination
    * @param {Object} [filter] - Mongo filter
-   * @param {Object} [options] - Query options
-   * @param {string} [options.sortBy] - Sorting criteria using the format: sortField:(desc|asc). Multiple sorting criteria should be separated by commas (,)
-   * @param {string} [options.populate] - Populate data fields. Hierarchy of fields should be separated by (.). Multiple populating criteria should be separated by commas (,)
-   * @param {number} [options.limit] - Maximum number of results per page (default = 10)
-   * @param {number} [options.page] - Current page (default = 1)
+   * @param {Object} [oopttions] - Query options
+   * @param {string} [oopttions.sortBy] - Sorting criteria using the format: sortField:(desc|asc). Multiple sorting criteria should be separated by commas (,)
+   * @param {string} [oopttions.populate] - Populate data fields. Hierarchy of fields should be separated by (.). Multiple populating criteria should be separated by commas (,)
+   * @param {number} [oopttions.limit] - Maximum number of results per page (default = 10)
+   * @param {number} [oopttions.page] - Current page (default = 1)
    * @returns {Promise<QueryResult>}
    */
   schema.statics.paginate = async function (filter, options) {

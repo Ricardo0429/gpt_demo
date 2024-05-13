@@ -106,6 +106,23 @@ const updateImageById = async (req) => {
   return entity.uploads;
 };
 
+const updateTag = async (req) => {
+  const {
+    params: { id: imageId },
+    user: { _id: userId },
+    body: { tag },
+  } = req;
+  const entity = await Image.findOne({ user: Types.ObjectId(userId) });
+  entity.uploads = entity.uploads.map((upload) => {
+    if (upload._id == imageId) {
+      upload.tag = tag;
+    }
+    return upload;
+  });
+  await entity.save();
+  return entity.uploads;
+};
+
 const deleteImageById = async (userData) => {
   const {
     params: { id: imageId },

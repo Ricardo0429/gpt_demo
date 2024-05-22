@@ -55,7 +55,41 @@ const uploadImage = async (req) => {
   }
 };
 
+
+const uploadImage = async (req) => {
+  try {
+    const { imgUrl, prompt, tag } = req.body;
+    const newEntry = new Image();
+    const userId = Types.ObjectId(req.user._id);
+    const user = await Image.findOne({ user: userId });
+    if (user) {
+      user.uploads.push({ url: imgUrl, prompt, tag });
+      return user.save();
+    } else {
+      newEntry.user = userId;
+      newEntry.uploads.push({ url: imgUrl, prompt, tag });
+      return newEntry.save();
+    }
+  } catch (error) {
+    throw error;
+  }
+};
+
+
 const groupByDate = (imageList) => {
+  const tempImagesByDate = imageList.reduceRight(function (list, elems) {
+    const splitedDate = moment(elems['date']).format('MMMM Do, YYYY');
+    if (!list[splitedDate]) {
+      list[splitedDate] = [];
+    }
+    list[splitedDate].push(elems);
+    return list;
+  }, {});
+  return tempImagesByDate;
+};
+
+
+const groupThenDate = (imageList) => {
   const tempImagesByDate = imageList.reduceRight(function (list, elems) {
     const splitedDate = moment(elems['date']).format('MMMM Do, YYYY');
     if (!list[splitedDate]) {

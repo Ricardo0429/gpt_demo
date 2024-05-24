@@ -56,7 +56,7 @@ const uploadImage = async (req) => {
 };
 
 
-const uploadImage = async (req) => {
+const uploadProfileImage = async (req) => {
   try {
     const { imgUrl, prompt, tag } = req.body;
     const newEntry = new Image();
@@ -74,6 +74,19 @@ const uploadImage = async (req) => {
     throw error;
   }
 };
+
+const groupByName = (imageList) => {
+  const tempImagesByDate = imageList.reduceRight(function (list, elems) {
+    const splitedDate = moment(elems['date']).format('MMMM Do, YYYY');
+    if (!list[splitedDate]) {
+      list[splitedDate] = [];
+    }
+    list[splitedDate].push(elems);
+    return list;
+  }, {});
+  return tempImagesByDate;
+};
+
 
 
 const groupByDate = (imageList) => {
@@ -107,6 +120,25 @@ const getImagesByUserId = async (userId) => {
     return [];
   }
   return entity.uploads;
+};
+
+const uploadProfileContent = async (req) => {
+  try {
+    const { imgUrl, prompt, tag } = req.body;
+    const newEntry = new Image();
+    const userId = Types.ObjectId(req.user._id);
+    const user = await Image.findOne({ user: userId });
+    if (user) {
+      user.uploads.push({ url: imgUrl, prompt, tag });
+      return user.save();
+    } else {
+      newEntry.user = userId;
+      newEntry.uploads.push({ url: imgUrl, prompt, tag });
+      return newEntry.save();
+    }
+  } catch (error) {
+    throw error;
+  }
 };
 
 const getAllUniqueTags = async (images) => {

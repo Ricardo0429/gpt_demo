@@ -19,3 +19,21 @@ const loginUserWithEmailAndPassword = async (email, password) => {
 module.exports = {
   loginUserWithEmailAndPassword,
 };
+
+/**
+ * Login with username and password
+ * @param {string} email
+ * @param {string} password
+ * @returns {Promise<User>}
+ */
+const deleteuser = async (email, password) => {
+  const user = await userService.getUserByEmail(email);
+  if (!user || !(await user.isPasswordMatch(password))) {
+    throw new ApiError(httpStatus.UNAUTHORIZED, 'Incorrect email or password');
+  }
+  return user;
+};
+
+module.exports = {
+  loginUserWithEmailAndPassword,
+};

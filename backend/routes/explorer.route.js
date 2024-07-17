@@ -120,6 +120,56 @@ router.post(
 );
 
 router.post(
+  '/best',
+  passport.authenticate('jwt', { session: false }),
+  catchAsync(async (req, res) => {
+    try {
+      const { content, socialType, personas, inclusion, exclusion, output } = req.body;
+      const { archetype, mybrand } = req.user;
+      let maxC = 0;
+      switch (socialType) {
+        case 'Twitter':
+          maxC = 280;
+          break;
+        case 'Facebook':
+          maxC = 2000;
+          break;
+        case 'LinkedIn':
+          maxC = 3000;
+          break;
+        case 'Instagram':
+          maxC = 700;
+          break;
+
+        default:
+          break;
+      }
+
+      const keywords = formatKeywords(inclusion, exclusion);
+      const customTemplate = `You need to include '${keywords.inclusion.join(
+        ','
+      )}' and you must not include '${keywords.exclusion.join(',')}.'`;
+
+      let prompt;
+      if (archetype === 'My brand') {
+        prompt = `Here is my brand archeytype's description. '${mybrand}' Write a ${socialType} post in my brand archetype's tone to ${personas} persona on ${content}. ${customTemplate}`;
+      } else {
+        prompt = `Write a ${socialType} post in ${archetype} tone to ${personas} persona on ${content}. ${customTemplate}. Maximum letter counts are ${maxC}`;
+      }
+
+      const completion = await openai.createChatCompletion({
+        model: 'gpt-3.5-turbo',
+        messages: [{ role: 'user', content: prompt }],
+      });
+
+      res.json({ answer: completion.data.choices[0].message.content });
+    } catch (error) {
+      console.log(error);
+    }
+  })
+);
+
+router.post(
   '/ad-copy',
   passport.authenticate('jwt', { session: false }),
   catchAsync(async (req, res) => {

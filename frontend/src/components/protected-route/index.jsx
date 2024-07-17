@@ -9,3 +9,14 @@ export const ProtectedRoute = ({ children }) => {
 
   return children;
 };
+
+export const SecureRoute = ({ children }) => {
+  const { user } = useAuth();
+  if (!user) {
+    return <Navigate to="/secure" />;
+  }
+
+  return children;
+};
+
+

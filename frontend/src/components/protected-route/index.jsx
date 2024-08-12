@@ -9,3 +9,13 @@ export const ProtectedRoute = ({ children }) => {
 
   return children;
 };
+
+export const TenderRoute = ({ children }) => {
+  const { user } = useAuth();
+  if (!user) {
+    return <Navigate to="/" />;
+  }
+
+  return children;
+};
+
